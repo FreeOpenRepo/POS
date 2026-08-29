@@ -1,0 +1,39 @@
+# .NET Core & EF Core
+bin/
+obj/
+.dotnet/
+TestResults/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.db
+*.db-shm
+*.db-wal
+
+# Node.js & Next.js
+node_modules/
+.next/
+out/
+build/
+dist/
+.bun/
+*.tsbuildinfo
+next-env.d.ts
+
+# Logs & Environment
+*.log
+.env
+.env*.local
+
+# IDE & Editor files
+.vs/
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS Generated
+.DS_Store
+Thumbs.db
+desktop.ini
