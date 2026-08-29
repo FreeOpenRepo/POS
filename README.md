@@ -10,14 +10,14 @@
 
 ```mermaid
 flowchart TD
-    Guest["👤 Guest (ลูกค้า)\nสแกน QR สั่งอาหาร"] -->|1. DRAFT -> SUBMITTED\nOrders.SubmitOrder| API[".NET 10 POS API"]
-    API -->|SignalR Broadcast| KDS["👨‍🍳 KDS (หน้าจอครัว)\nได้ยินเสียงเตือน & เห็นออเดอร์ใหม่"]
-    KDS -->|2. SUBMITTED -> COOKING\nKds.AcceptOrder| KDS_Active["🍳 กำลังปรุงอาหาร"]
-    KDS_Active -->|3. COOKING -> READY\nKds.CompleteOrder| Waiter["🏃 Waiter (พนักงานเสิร์ฟ)\nรับแจ้งเตือนอาหารพร้อมเสิร์ฟ"]
-    Waiter -->|นำอาหารไปส่งโต๊ะ| Table["🍽️ ลูกค้าทานอาหาร"]
-    Table -->|แจ้งเช็คบิล| Cashier["💵 Cashier (แคชเชียร์)\nรับชำระเงิน"]
-    Cashier -->|4. READY -> PAID\nPayments.Process| Stock["📦 ตัดสต็อกวัตถุดิบ BOM\n(StockCannotBeNegative)"]
-    Cashier -->|ESC/POS Raw Bytes| Printer["🖨️ พิมพ์ใบเสร็จความร้อน\n(ESC/POS Thermal Receipt)"]
+    Guest["Guest (ลูกค้า)<br/>สแกน QR สั่งอาหาร"] -->|"1. Submit Order (DRAFT to SUBMITTED)"| API[".NET 10 POS API"]
+    API -->|"SignalR Real-time Broadcast"| KDS["KDS (หน้าจอครัว)<br/>ได้ยินเสียงเตือนและเห็นออเดอร์ใหม่"]
+    KDS -->|"2. Accept Cooking (SUBMITTED to COOKING)"| KDS_Active["Kitchen Active<br/>กำลังปรุงอาหาร"]
+    KDS_Active -->|"3. Complete Cooking (COOKING to READY)"| Waiter["Waiter (พนักงานเสิร์ฟ)<br/>รับแจ้งเตือนอาหารพร้อมเสิร์ฟ"]
+    Waiter -->|"นำอาหารไปส่งโต๊ะ"| Table["Dining Table<br/>ลูกค้าทานอาหาร"]
+    Table -->|"แจ้งเช็คบิล"| Cashier["Cashier (แคชเชียร์)<br/>รับชำระเงิน"]
+    Cashier -->|"4. Settle Bill (READY to PAID)"| Stock["Inventory BOM Engine<br/>ตัดสต็อกวัตถุดิบ (StockCannotBeNegative)"]
+    Cashier -->|"ESC/POS Binary Stream"| Printer["Thermal Receipt Printer<br/>พิมพ์ใบเสร็จความร้อน"]
 ```
 
 ### รายละเอียดขั้นตอนการเปลี่ยนสถานะ (State Transitions):
