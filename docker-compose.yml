@@ -12,7 +12,7 @@ services:
       - pos_postgres_data:/var/lib/postgresql/data
       - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      test: ["CMD", "pg_isready", "-U", "postgres", "-d", "pos_db"]
       interval: 3s
       timeout: 5s
       retries: 10
@@ -60,4 +60,5 @@ volumes:
 networks:
   pos-network:
     driver: bridge
+
 
