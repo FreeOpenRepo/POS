@@ -6,6 +6,7 @@ COPY package.json bun.lock* ./
 RUN bun install
 
 COPY . .
+RUN mkdir -p public
 ENV NEXT_TELEMETRY_DISABLED=1
 RUN bun run build
 
