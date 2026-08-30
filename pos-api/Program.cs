@@ -43,25 +43,28 @@ builder.Services.AddScoped<IOrderService, OrderService>();
 
 var app = builder.Build();
 
-// Ensure Database is Created & Seeded with retry
-for (int i = 0; i < 5; i++)
-{
-    try
-    {
-        using var scope = app.Services.CreateScope();
-        var db = scope.ServiceProvider.GetRequiredService<PosDbContext>();
-        db.Database.EnsureCreated();
-        app.Logger.LogInformation("Database connected and verified successfully.");
-        break;
-    }
-    catch (Exception ex)
-    {
-        app.Logger.LogWarning("Database initialization attempt {Attempt} failed: {Message}. Retrying...", i + 1, ex.Message);
-        System.Threading.Thread.Sleep(2000);
-    }
-}
-
 app.UseCors();
+
+// Ensure Database is Created & Seeded asynchronously without blocking Kestrel startup
+app.Lifetime.ApplicationStarted.Register(async () =>
+{
+    for (int i = 0; i < 5; i++)
+    {
+        try
+        {
+            using var scope = app.Services.CreateScope();
+            var db = scope.ServiceProvider.GetRequiredService<PosDbContext>();
+            await db.Database.EnsureCreatedAsync();
+            app.Logger.LogInformation("Database connected and verified successfully.");
+            break;
+        }
+        catch (Exception ex)
+        {
+            app.Logger.LogWarning("Database initialization attempt {Attempt} failed: {Message}. Retrying...", i + 1, ex.Message);
+            await Task.Delay(2000);
+        }
+    }
+});
 
 if (app.Environment.IsDevelopment())
 {
