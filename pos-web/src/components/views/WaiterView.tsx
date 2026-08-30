@@ -6,6 +6,7 @@ import { fetchTables, fetchActiveOrders, fetchProducts, submitOrder } from '@/li
 import { signalRManager } from '@/lib/signalr';
 import { playWaiterReadyAlert } from '@/lib/sound';
 import { Bell, Users, Plus, Utensils, CheckCircle2, Clock, DollarSign, X, Sparkles } from 'lucide-react';
+import { showSuccess, showError } from '@/lib/swal';
 import confetti from 'canvas-confetti';
 
 export default function WaiterView() {
@@ -86,8 +87,9 @@ export default function WaiterView() {
       setSelectedTableForOrder(null);
       setOrderCart([]);
       await loadData();
+      showSuccess('บันทึกออเดอร์สำเร็จ', `ส่งออเดอร์โต๊ะ ${selectedTableForOrder.tableNumber} เข้าครัวแล้ว`);
     } catch (err: any) {
-      alert('Order failed: ' + err.message);
+      showError('บันทึกออเดอร์ไม่สำเร็จ', err.message);
     } finally {
       setIsSubmitting(false);
     }

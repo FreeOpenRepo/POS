@@ -6,6 +6,7 @@ import { fetchProducts, fetchTables, submitOrder, fetchActiveOrders } from '@/li
 import { signalRManager } from '@/lib/signalr';
 import { ShoppingBag, CheckCircle2, UtensilsCrossed, Clock, Flame, Sparkles, X, Plus, Minus } from 'lucide-react';
 import confetti from 'canvas-confetti';
+import { showSuccess, showError, showWarning } from '@/lib/swal';
 
 export default function GuestView() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -123,8 +124,9 @@ export default function GuestView() {
       setIsCartOpen(false);
       setActiveOrders(prev => [order, ...prev.filter(o => o.id !== order.id)]);
       confetti({ particleCount: 70, spread: 70, origin: { y: 0.6 } });
+      showSuccess('ส่งออเดอร์สำเร็จ!', `ออเดอร์ #${order.orderNumber} ถูกส่งไปยังห้องครัวเรียบร้อยแล้ว`);
     } catch (err: any) {
-      alert('Order submission failed: ' + err.message);
+      showError('ส่งออเดอร์ไม่สำเร็จ', err.message || 'กรุณาลองใหม่อีกครั้ง');
     } finally {
       setIsSubmitting(false);
     }

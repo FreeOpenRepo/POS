@@ -7,8 +7,13 @@ import { signalRManager } from '@/lib/signalr';
 import { playPaymentSuccessSound } from '@/lib/sound';
 import { printViaWebBluetooth, base64ToUint8Array } from '@/lib/escpos';
 import { QRCodeSVG } from 'qrcode.react';
-import { CreditCard, Banknote, QrCode, Printer, CheckCircle2, AlertCircle, RefreshCw, Package, FileText, X, Sparkles } from 'lucide-react';
+import { 
+  Banknote, CreditCard, QrCode, Printer, CheckCircle2, Clock, 
+  AlertCircle, DollarSign, Package, RefreshCw, X, Receipt, 
+  ArrowRight, ShieldCheck, Sparkles, Bluetooth 
+} from 'lucide-react';
 import confetti from 'canvas-confetti';
+import { showSuccess, showError, showInfo } from '@/lib/swal';
 
 export default function CashierView() {
   const [orders, setOrders] = useState<Order[]>([]);
@@ -112,9 +117,9 @@ export default function CashierView() {
     try {
       const bytes = base64ToUint8Array(receiptData.escposBase64);
       await printViaWebBluetooth(bytes);
-      alert('Receipt sent to Bluetooth Thermal Printer successfully!');
+      showSuccess('พิมพ์สำเร็จ', 'ส่งใบเสร็จไปยังเครื่องพิมพ์เทอร์มอล Bluetooth เรียบร้อยแล้ว');
     } catch (err: any) {
-      alert('Bluetooth print error: ' + err.message);
+      showError('การพิมพ์ขัดข้อง', err.message);
     }
   }
 
@@ -128,14 +133,16 @@ export default function CashierView() {
     a.download = `receipt-${receiptData.order.orderNumber}.bin`;
     a.click();
     URL.revokeObjectURL(url);
+    showInfo('ดาวน์โหลดเสร็จสิ้น', `บันทึกไฟล์ Binary ESC/POS สำหรับเครื่องพิมพ์ Thermal แล้ว`);
   }
 
   async function handleRestock(ingredientId: number, qty: number) {
     try {
       await adjustInventoryStock(ingredientId, qty, 'Manual Restock');
       await loadInventory();
+      showSuccess('เติมสต็อกสำเร็จ', `เพิ่มวัตถุดิบ ${qty} หน่วยเรียบร้อยแล้ว`);
     } catch (err: any) {
-      alert('Restock failed: ' + err.message);
+      showError('เติมสต็อกไม่สำเร็จ', err.message);
     }
   }
 

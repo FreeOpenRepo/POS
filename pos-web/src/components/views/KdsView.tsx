@@ -7,6 +7,7 @@ import { signalRManager } from '@/lib/signalr';
 import { playKitchenNewOrderChime } from '@/lib/sound';
 import { ChefHat, Flame, CheckCircle2, Clock, AlertTriangle, Filter, Sparkles } from 'lucide-react';
 import confetti from 'canvas-confetti';
+import { showSuccess, showError, showInfo } from '@/lib/swal';
 
 export default function KdsView() {
   const [queue, setQueue] = useState<Order[]>([]);
@@ -60,8 +61,9 @@ export default function KdsView() {
     try {
       const updated = await acceptKdsOrder(orderId);
       setQueue(prev => prev.map(o => o.id === orderId ? updated : o));
+      showInfo('รับออเดอร์แล้ว', `กำลังปรุงออเดอร์ #${updated.orderNumber}`);
     } catch (err: any) {
-      alert('Failed to accept order: ' + err.message);
+      showError('ไม่สามารถรับออเดอร์ได้', err.message);
     }
   }
 
@@ -70,8 +72,9 @@ export default function KdsView() {
       await completeKdsOrder(orderId);
       setQueue(prev => prev.filter(o => o.id !== orderId));
       confetti({ particleCount: 50, spread: 60, origin: { y: 0.5 } });
+      showSuccess('ปรุงอาหารเสร็จแล้ว!', 'ส่งสัญญาณแจ้งเตือนพนักงานเสิร์ฟเรียบร้อย');
     } catch (err: any) {
-      alert('Failed to complete order: ' + err.message);
+      showError('ไม่สามารถจบออเดอร์ได้', err.message);
     }
   }
 

@@ -9,6 +9,7 @@ import WaiterView from '@/components/views/WaiterView';
 import KdsView from '@/components/views/KdsView';
 import CashierView from '@/components/views/CashierView';
 import { Sparkles, ChefHat, Users, Banknote, UtensilsCrossed, Wifi, WifiOff, RefreshCw, Volume2 } from 'lucide-react';
+import { showSuccess, showInfo, showError } from '@/lib/swal';
 
 export default function Home() {
   const [activeRole, setActiveRole] = useState<ActorRole>('Cashier');
@@ -38,8 +39,12 @@ export default function Home() {
       const count = await syncOfflineQueue();
       setSyncCount(count);
       if (count > 0) {
-        alert(`Successfully synced ${count} offline order(s) to server.`);
+        showSuccess('Sync สำเร็จ', `ซิงค์ออเดอร์ออฟไลน์ ${count} รายการขึ้นสู่เซิร์ฟเวอร์เรียบร้อยแล้ว`);
+      } else {
+        showInfo('ข้อมูลเป็นปัจจุบัน', 'ไม่มีรายการออฟไลน์ที่รอซิงค์');
       }
+    } catch (err: any) {
+      showError('ซิงค์ไม่สำเร็จ', err.message || 'เกิดข้อผิดพลาดในการเชื่อมต่อ');
     } finally {
       setIsSyncing(false);
     }
