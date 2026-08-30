@@ -5,6 +5,7 @@ using pos_api.Models;
 using pos_api.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.WebHost.UseUrls("http://0.0.0.0:5000");
 
 // Add services
 builder.Services.AddOpenApi();
@@ -42,11 +43,22 @@ builder.Services.AddScoped<IOrderService, OrderService>();
 
 var app = builder.Build();
 
-// Ensure Database is Created & Seeded
-using (var scope = app.Services.CreateScope())
+// Ensure Database is Created & Seeded with retry
+for (int i = 0; i < 5; i++)
 {
-    var db = scope.ServiceProvider.GetRequiredService<PosDbContext>();
-    db.Database.EnsureCreated();
+    try
+    {
+        using var scope = app.Services.CreateScope();
+        var db = scope.ServiceProvider.GetRequiredService<PosDbContext>();
+        db.Database.EnsureCreated();
+        app.Logger.LogInformation("Database connected and verified successfully.");
+        break;
+    }
+    catch (Exception ex)
+    {
+        app.Logger.LogWarning("Database initialization attempt {Attempt} failed: {Message}. Retrying...", i + 1, ex.Message);
+        System.Threading.Thread.Sleep(2000);
+    }
 }
 
 app.UseCors();
