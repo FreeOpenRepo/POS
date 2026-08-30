@@ -1,5 +1,9 @@
-# Build Stage
-FROM oven/bun:1.2-alpine AS build
+# 1. Base Stage
+FROM node:22-alpine AS base
+RUN npm install -g bun
+
+# 2. Dependencies & Build Stage
+FROM base AS builder
 WORKDIR /app
 
 COPY package.json bun.lock* ./
@@ -10,17 +14,17 @@ RUN mkdir -p public
 ENV NEXT_TELEMETRY_DISABLED=1
 RUN bun run build
 
-# Runtime Stage
+# 3. Production Runner Stage
 FROM node:22-alpine AS runner
 WORKDIR /app
 
 ENV NODE_ENV=production
 ENV PORT=3000
+ENV HOSTNAME="0.0.0.0"
 
-COPY --from=build /app/package.json ./
-COPY --from=build /app/node_modules ./node_modules
-COPY --from=build /app/.next ./.next
-COPY --from=build /app/public ./public
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/.next/static ./.next/static
 
 EXPOSE 3000
-CMD ["npm", "start"]
+CMD ["node", "server.js"]
