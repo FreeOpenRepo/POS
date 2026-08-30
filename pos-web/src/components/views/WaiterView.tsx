@@ -229,7 +229,7 @@ export default function WaiterView() {
                   </div>
                   <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.9rem', fontWeight: 700 }}>
                     <span style={{ color: 'var(--text-muted)' }}>Bill:</span>
-                    <span style={{ color: 'var(--accent-emerald)' }}>{tableOrder.grandยอดรวม.toLocaleString()} THB</span>
+                    <span style={{ color: 'var(--accent-emerald)' }}>{tableOrder.grandTotal.toLocaleString()} THB</span>
                   </div>
                 </div>
               ) : (
@@ -344,4 +344,5 @@ export default function WaiterView() {
     </div>
   );
 }
+
 

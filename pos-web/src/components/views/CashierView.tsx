@@ -73,7 +73,7 @@ export default function CashierView() {
 
   function handleSelectOrderForSettlement(order: Order) {
     setSelectedOrder(order);
-    setAmountTendered(order.grandยอดรวม);
+    setAmountTendered(order.grandTotal);
     setPaymentMethod('CASH');
     setTxnRef('');
     setErrorMessage(null);
@@ -81,8 +81,8 @@ export default function CashierView() {
 
   async function handleSettlePayment() {
     if (!selectedOrder) return;
-    if (amountTendered < selectedOrder.grandยอดรวม) {
-      setErrorMessage(`Amount tendered (${amountTendered} THB) is less than total due (${selectedOrder.grandยอดรวม} THB).`);
+    if (amountTendered < selectedOrder.grandTotal) {
+      setErrorMessage(`Amount tendered (${amountTendered} THB) is less than total due (${selectedOrder.grandTotal} THB).`);
       return;
     }
 
@@ -146,7 +146,7 @@ export default function CashierView() {
     }
   }
 
-  const changeDue = selectedOrder ? Math.max(0, amountTendered - selectedOrder.grandยอดรวม) : 0;
+  const changeDue = selectedOrder ? Math.max(0, amountTendered - selectedOrder.grandTotal) : 0;
 
   return (
     <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '24px 16px', minHeight: '100vh' }}>
@@ -268,7 +268,7 @@ export default function CashierView() {
                         </div>
                         <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '1.05rem', fontWeight: 800, marginTop: '4px' }}>
                           <span>ยอดรวม Due:</span>
-                          <span style={{ color: 'var(--accent-emerald)' }}>{order.grandยอดรวม.toLocaleString()} THB</span>
+                          <span style={{ color: 'var(--accent-emerald)' }}>{order.grandTotal.toLocaleString()} THB</span>
                         </div>
                       </div>
                     </div>
@@ -391,7 +391,7 @@ export default function CashierView() {
               <div style={{ background: 'rgba(16, 185, 129, 0.12)', border: '1px solid rgba(16, 185, 129, 0.3)', borderRadius: '12px', padding: '16px', marginBottom: '20px', textAlign: 'center' }}>
                 <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Amount Due</div>
                 <div style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--accent-emerald)' }}>
-                  {selectedOrder.grandยอดรวม.toLocaleString()} THB
+                  {selectedOrder.grandTotal.toLocaleString()} THB
                 </div>
               </div>
 
@@ -413,7 +413,7 @@ export default function CashierView() {
                         onClick={() => {
                           setPaymentMethod(m.id as any);
                           if (m.id === 'PROMPTPAY_QR' || m.id === 'CREDIT_CARD') {
-                            setAmountTendered(selectedOrder.grandยอดรวม);
+                            setAmountTendered(selectedOrder.grandTotal);
                           }
                         }}
                         style={{
@@ -453,7 +453,7 @@ export default function CashierView() {
                   {/* Fast denomination buttons */}
                   <div style={{ display: 'flex', gap: '8px', marginBottom: '16px' }}>
                     {[
-                      { label: 'Exact', val: selectedOrder.grandยอดรวม },
+                      { label: 'Exact', val: selectedOrder.grandTotal },
                       { label: '500฿', val: 500 },
                       { label: '1,000฿', val: 1000 },
                       { label: '2,000฿', val: 2000 },
@@ -484,13 +484,13 @@ export default function CashierView() {
                 <div style={{ textAlign: 'center', padding: '10px' }}>
                   <div style={{ background: '#fff', padding: '16px', borderRadius: '12px', display: 'inline-block', marginBottom: '12px' }}>
                     <QRCodeSVG
-                      value={`00020101021229370016A000000677010111011300668999988885802TH5303764540${selectedOrder.grandยอดรวม.toFixed(2)}6304`}
+                      value={`00020101021229370016A000000677010111011300668999988885802TH5303764540${selectedOrder.grandTotal.toFixed(2)}6304`}
                       size={180}
                       level="H"
                     />
                   </div>
                   <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
-                    Scan with any Thai Banking App to pay <strong>{selectedOrder.grandยอดรวม.toLocaleString()} THB</strong>
+                    Scan with any Thai Banking App to pay <strong>{selectedOrder.grandTotal.toLocaleString()} THB</strong>
                   </p>
                 </div>
               )}
@@ -514,7 +514,7 @@ export default function CashierView() {
                 className="btn-success"
                 style={{ width: '100%', padding: '16px', marginTop: '20px', fontSize: '1.05rem', fontWeight: 800 }}
               >
-                {isProcessing ? 'Processing & Printing...' : `Complete Settlement (${selectedOrder.grandยอดรวม.toLocaleString()} THB)`}
+                {isProcessing ? 'Processing & Printing...' : `Complete Settlement (${selectedOrder.grandTotal.toLocaleString()} THB)`}
               </button>
             </div>
           </div>
@@ -572,4 +572,5 @@ export default function CashierView() {
     </div>
   );
 }
+
 

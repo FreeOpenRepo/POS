@@ -76,7 +76,7 @@ export default function GuestView() {
     return true;
   });
 
-  const cartยอดรวม = cart.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
+  const cartTotal = cart.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
   const cartItemCount = cart.reduce((sum, item) => sum + item.quantity, 0);
 
   function addToCart(product: Product, quantity = 1, notes = '') {
@@ -211,7 +211,7 @@ export default function GuestView() {
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', fontWeight: 600 }}>
                   <span style={{ color: 'var(--text-muted)' }}>ยอดรวม:</span>
-                  <span style={{ color: 'var(--accent-emerald)' }}>{ord.grandยอดรวม.toLocaleString()} บาท</span>
+                  <span style={{ color: 'var(--accent-emerald)' }}>{ord.grandTotal.toLocaleString()} บาท</span>
                 </div>
               </div>
             ))}
@@ -326,7 +326,7 @@ export default function GuestView() {
               <span style={{ fontWeight: 700, fontSize: '1rem' }}>ตะกร้าสินค้า ({cartItemCount} รายการ)</span>
             </div>
             <div style={{ fontWeight: 800, fontSize: '1.1rem' }}>
-              {cartยอดรวม.toLocaleString()} บาท →
+              {cartTotal.toLocaleString()} บาท →
             </div>
           </button>
         </div>
@@ -442,11 +442,11 @@ export default function GuestView() {
             <div style={{ padding: '20px', borderTop: '1px solid var(--border-glass)', background: 'rgba(0,0,0,0.3)' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px', fontSize: '0.9rem', color: 'var(--text-secondary)' }}>
                 <span>ราคารวมสินค้า</span>
-                <span>{cartยอดรวม.toLocaleString()} บาท</span>
+                <span>{cartTotal.toLocaleString()} บาท</span>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '16px', fontSize: '0.9rem', color: 'var(--text-secondary)' }}>
                 <span>ภาษีมูลค่าเพิ่ม VAT 7%</span>
-                <span>{(cartยอดรวม * 0.07).toFixed(2)} บาท</span>
+                <span>{(cartTotal * 0.07).toFixed(2)} บาท</span>
               </div>
               <button
                 onClick={handleCheckout}
@@ -463,4 +463,5 @@ export default function GuestView() {
     </div>
   );
 }
+
 
