@@ -31,6 +31,78 @@ flowchart TD
 
 ---
 
+## 🗄️ Database Design & Entity Relationships (PostgreSQL 18)
+
+### 1. Entity-Relationship Diagram (ER Diagram)
+
+```mermaid
+erDiagram
+    Products ||--o{ BillOfMaterials : "has recipe BOM items"
+    InventoryItems ||--o{ BillOfMaterials : "used as ingredients in"
+    Receipts ||--o{ ReceiptItems : "contains ordered lines"
+    Products ||--o{ ReceiptItems : "sold as line item"
+
+    Products {
+        int Id PK
+        string Name
+        numeric Price
+        string Category
+        string Sku UK
+    }
+
+    InventoryItems {
+        int Id PK
+        string Name
+        numeric StockQuantity
+        string Unit
+    }
+
+    BillOfMaterials {
+        int Id PK
+        int ProductId FK
+        int InventoryItemId FK
+        numeric RequiredQuantity
+    }
+
+    Receipts {
+        int Id PK
+        string OrderNumber UK
+        numeric SubTotal
+        numeric Tax
+        numeric GrandTotal
+        string EscPosRawBase64
+        timestamp CreatedAt
+    }
+
+    ReceiptItems {
+        int Id PK
+        int ReceiptId FK
+        int ProductId FK
+        string ProductName
+        numeric UnitPrice
+        int Quantity
+    }
+```
+
+### 2. รายละเอียดตารางและความสัมพันธ์ (Schema & Relationships)
+- **`Products` (สินค้า/เมนู)**:
+  - เก็บรายการอาหารและเครื่องดื่ม พร้อมราคาขายและหมวดหมู่
+  - ความสัมพันธ์: `1 Product` มีได้หลาย `BillOfMaterials` (สูตรประกอบด้วยวัตถุดิบหลายชนิด)
+- **`InventoryItems` (วัตถุดิบในคลัง)**:
+  - จัดเก็บปริมาณคงเหลือของวัตถุดิบ (เช่น เมล็ดกาแฟ, นมสด, ผงมัทฉะ)
+  - ความสัมพันธ์: `1 InventoryItem` สามารถถูกนำไปใช้ในหลายสูตร `BillOfMaterials`
+- **`BillOfMaterials` (ตารางเชื่อมโยงสูตรอาหาร - Junction Table)**:
+  - Foreign Key: `ProductId` ➔ `Products(Id)`
+  - Foreign Key: `InventoryItemId` ➔ `InventoryItems(Id)`
+  - เก็บ `RequiredQuantity` อัตราส่วนวัตถุดิบที่ต้องตัดออกจากคลังต่อการขาย 1 หน่วย
+- **`Receipts` (ใบเสร็จรับเงิน)**:
+  - เก็บประวัติธุรกรรมยอดรวม ภาษีมูลค่าเพิ่ม (VAT 7%) และคำสั่ง ESC/POS Binary สำหรับพิมพ์ซ้ำ
+- **`ReceiptItems` (รายการสินค้าในใบเสร็จ)**:
+  - Foreign Key: `ReceiptId` ➔ `Receipts(Id)`
+  - Snapshot `UnitPrice` ณ เวลาที่ขาย เพื่อให้สอดคล้องกับ Invariant `PriceImmutableAfterCheckout`
+
+---
+
 ## 🛡️ กฎเหล็กของระบบ (Domain Invariants)
 
 1. **`StockCannotBeNegative` (สต็อกวัตถุดิบห้ามติดลบ)**:
@@ -44,6 +116,7 @@ flowchart TD
 
 | ส่วนประกอบ | เทคโนโลยีที่เลือก | เหตุผลที่เลือก | ข้อดีหลัก (Advantages) |
 |---|---|---|---|
+| **Database** | **PostgreSQL 18** | มาตรฐาน RDBMS ระดับองค์กร จัดการ Transaction สต็อกแม่นยำสูง (ACID) | มี Auto-Init Script (`db/init.sql`) พร้อมรันและรองรับ Concurrent Locking |
 | **Frontend UI** | **Next.js 16 + React 19** | รองรับ SSR/SSG ประสิทธิภาพสูง เรนเดอร์รวดเร็ว | ผู้ใช้เปิดหน้าเว็บสั่งอาหารได้ทันที ไม่กระตุก รองรับทั้งมือถือและแท็บเล็ต |
 | **Offline-First DB** | **Dexie.js (IndexedDB)** | จัดเก็บแคชเมนูและออเดอร์บนอุปกรณ์ของเครื่อง POS ท้องถิ่น | แคชเชียร์ยังสามารถทำงานและบันทึกออเดอร์ได้ต่อเนื่องแม้เน็ตจะหลุดชั่วคราว |
 | **Audio Notification**| **Web Audio API** | สังเคราะห์เสียงเตือน Chime/Beep ในเบราว์เซอร์โดยไม่ต้องโหลดไฟล์เสียงภายนอก | เสียงเตือนในครัวทำงานได้ 100% ไม่มีดีเลย์ ไม่เปลืองแบนด์วิดท์ |
@@ -55,16 +128,22 @@ flowchart TD
 
 ## 🚀 วิธีการรันระบบ (Quick Start)
 
-### 1. รัน Backend API:
-```powershell
-cd pos-api
-dotnet run
+### ตัวเลือกที่ 1: รันด้วย Docker Compose (แนะนำ)
+```bash
+docker compose up --build -d
 ```
-> API พร้อมทำงานที่: `http://localhost:5000`
+> ระบบจะรัน **PostgreSQL 18** (`:5432`), **.NET 10 API** (`:5000`), และ **Next.js 16 Web** (`:3000`) พร้อม Seed Data ให้ใช้งานได้ทันที
 
-### 2. รัน Frontend Web:
-```powershell
-cd pos-web
-bun run dev
-```
-> เข้าใช้งานได้ที่: `http://localhost:3000`
+### ตัวเลือกที่ 2: รันแบบแยก Service (Manual)
+1. **รัน Backend API**:
+   ```powershell
+   cd pos-api
+   dotnet run
+   ```
+   > API พร้อมทำงานที่: `http://localhost:5000`
+2. **รัน Frontend Web**:
+   ```powershell
+   cd pos-web
+   bun run dev
+   ```
+   > เข้าใช้งานได้ที่: `http://localhost:3000`
