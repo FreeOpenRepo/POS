@@ -7,10 +7,11 @@ import { signalRManager } from '@/lib/signalr';
 import { playPaymentSuccessSound } from '@/lib/sound';
 import { printViaWebBluetooth, base64ToUint8Array } from '@/lib/escpos';
 import { QRCodeSVG } from 'qrcode.react';
-import { 
-  Banknote, CreditCard, QrCode, Printer, CheckCircle2, Clock, 
-  AlertCircle, DollarSign, Package, RefreshCw, X, Receipt, 
-  ArrowRight, ShieldCheck, Sparkles, Bluetooth 
+import {
+  Banknote, CreditCard, QrCode, Printer, CheckCircle2, Clock,
+  AlertCircle, DollarSign, Package, RefreshCw, X, Receipt,
+  ArrowRight, ShieldCheck, Sparkles, Bluetooth,
+  FileText
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { showSuccess, showError, showInfo } from '@/lib/swal';
@@ -20,7 +21,7 @@ export default function CashierView() {
   const [tables, setTables] = useState<TableItem[]>([]);
   const [inventory, setInventory] = useState<Ingredient[]>([]);
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
-  
+
   // Payment Modal State
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('CASH');
   const [amountTendered, setAmountTendered] = useState<number>(0);
