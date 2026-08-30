@@ -1,0 +1,12 @@
+**/.git
+**/.next
+**/node_modules
+**/bin
+**/obj
+**/.vs
+**/.vscode
+**/.idea
+**/out
+**/*.log
+.env.local
+.env.*.local
