@@ -76,7 +76,7 @@ export default function GuestView() {
     return true;
   });
 
-  const cartTotal = cart.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
+  const cartยอดรวม = cart.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
   const cartItemCount = cart.reduce((sum, item) => sum + item.quantity, 0);
 
   function addToCart(product: Product, quantity = 1, notes = '') {
@@ -144,17 +144,17 @@ export default function GuestView() {
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <Sparkles style={{ color: 'var(--accent-cyan)', width: 22, height: 22 }} />
             <h1 style={{ fontSize: '1.5rem', fontWeight: 800, background: 'linear-gradient(135deg, #f8fafc, #94a3b8)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-              Guest Digital Menu & Self-Order
+              เมนูดิจิทัล & สั่งอาหารที่โต๊ะ (Self-Order)
             </h1>
           </div>
           <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem', marginTop: '4px' }}>
-            Browse our artisan cuisine, order directly from your table, and track preparation in real-time.
+            เลือกชมเมนูอาหารและเครื่องดื่ม สั่งออเดอร์ตรงถึงครัว พร้อมติดตามสถานะการปรุงแบบเรียลไทม์
           </p>
         </div>
 
         {/* Table Selector */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <span style={{ fontSize: '0.875rem', color: 'var(--text-muted)' }}>Dining at:</span>
+          <span style={{ fontSize: '0.875rem', color: 'var(--text-muted)' }}>โต๊ะที่นั่ง:</span>
           <select
             value={selectedTable?.id || ''}
             onChange={e => {
@@ -174,7 +174,7 @@ export default function GuestView() {
           >
             {tables.map(t => (
               <option key={t.id} value={t.id} style={{ background: '#121826', color: '#fff' }}>
-                Table {t.tableNumber} ({t.seats} Seats)
+                โต๊ะ {t.tableNumber} ({t.seats} ที่นั่ง)
               </option>
             ))}
           </select>
@@ -187,31 +187,31 @@ export default function GuestView() {
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
             <h3 style={{ fontSize: '1.1rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '8px' }}>
               <Clock style={{ width: 18, height: 18, color: 'var(--accent-cyan)' }} />
-              Live Table Orders ({selectedTable?.tableNumber})
+              สถานะออเดอร์ของโต๊ะ ({selectedTable?.tableNumber})
             </h3>
-            <span style={{ fontSize: '0.75rem', color: 'var(--accent-cyan)', fontWeight: 600 }}>REAL-TIME SIGNALR</span>
+            <span style={{ fontSize: '0.75rem', color: 'var(--accent-cyan)', fontWeight: 600 }}>สัญญาณสด SIGNALR</span>
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '12px' }}>
             {tableOrders.map(ord => (
               <div key={ord.id} style={{ background: 'rgba(255,255,255,0.04)', borderRadius: '12px', padding: '14px', border: '1px solid var(--border-glass)' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-                  <span style={{ fontWeight: 700, fontSize: '0.9rem' }}>{ord.orderNumber}</span>
+                  <span style={{ fontWeight: 700, fontSize: '0.9rem' }}>ออเดอร์ #{ord.orderNumber}</span>
                   <span
                     className={`badge-${ord.status.toLowerCase()}`}
                     style={{ padding: '4px 10px', borderRadius: '20px', fontSize: '0.75rem', fontWeight: 700 }}
                   >
-                    {ord.status === 'SUBMITTED' && '⏳ In Kitchen Queue'}
-                    {ord.status === 'COOKING' && '🔥 Chef Cooking'}
-                    {ord.status === 'READY' && '✨ Ready to Serve!'}
+                    {ord.status === 'SUBMITTED' && '⏳ กำลังรอคิวครัว'}
+                    {ord.status === 'COOKING' && '🔥 เชฟกำลังปรุง'}
+                    {ord.status === 'READY' && '✨ ปรุงเสร็จพร้อมเสิร์ฟ!'}
                   </span>
                 </div>
                 <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginBottom: '8px' }}>
                   {ord.items.map(i => `${i.quantity}x ${i.productName}`).join(', ')}
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', fontWeight: 600 }}>
-                  <span style={{ color: 'var(--text-muted)' }}>Total:</span>
-                  <span style={{ color: 'var(--accent-emerald)' }}>{ord.grandTotal.toLocaleString()} THB</span>
+                  <span style={{ color: 'var(--text-muted)' }}>ยอดรวม:</span>
+                  <span style={{ color: 'var(--accent-emerald)' }}>{ord.grandยอดรวม.toLocaleString()} บาท</span>
                 </div>
               </div>
             ))}
@@ -222,10 +222,10 @@ export default function GuestView() {
       {/* Category Pills */}
       <div style={{ display: 'flex', gap: '10px', marginBottom: '24px', overflowX: 'auto', paddingBottom: '4px' }}>
         {[
-          { id: 'ALL', label: 'All Specialties' },
-          { id: 'FOOD', label: '🍔 Gourmet Food' },
-          { id: 'BEVERAGE', label: '☕ Specialty Drinks' },
-          { id: 'DESSERT', label: '🍰 Artisan Desserts' },
+          { id: 'ALL', label: '✨ เมนูทั้งหมด' },
+          { id: 'FOOD', label: '🍔 อาหารจานหลัก' },
+          { id: 'BEVERAGE', label: '☕ เครื่องดื่มพิเศษ' },
+          { id: 'DESSERT', label: '🍰 ขนมหวาน & เบเกอรี่' },
         ].map(cat => (
           <button
             key={cat.id}
@@ -323,10 +323,10 @@ export default function GuestView() {
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
               <ShoppingBag style={{ width: 22, height: 22 }} />
-              <span style={{ fontWeight: 700, fontSize: '1rem' }}>{cartItemCount} item{cartItemCount > 1 ? 's' : ''} in cart</span>
+              <span style={{ fontWeight: 700, fontSize: '1rem' }}>ตะกร้าสินค้า ({cartItemCount} รายการ)</span>
             </div>
             <div style={{ fontWeight: 800, fontSize: '1.1rem' }}>
-              {cartTotal.toLocaleString()} THB →
+              {cartยอดรวม.toLocaleString()} บาท →
             </div>
           </button>
         </div>
@@ -351,10 +351,10 @@ export default function GuestView() {
               <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', marginBottom: '16px' }}>{selectedProductModal.description}</p>
 
               <div style={{ marginBottom: '16px' }}>
-                <label style={{ fontSize: '0.8rem', color: 'var(--text-muted)', display: 'block', marginBottom: '6px' }}>Special Instructions / Allergies:</label>
+                <label style={{ fontSize: '0.8rem', color: 'var(--text-muted)', display: 'block', marginBottom: '6px' }}>หมายเหตุพิเศษ / การแพ้อาหาร:</label>
                 <input
                   type="text"
-                  placeholder="e.g. Extra sauce, no onions..."
+                  placeholder="เช่น ไม่หวาน, เพิ่มซอส, ไม่ใส่ผัก..."
                   value={modalNotes}
                   onChange={e => setModalNotes(e.target.value)}
                   style={{ width: '100%', padding: '10px 14px', borderRadius: '10px', background: 'rgba(255,255,255,0.06)', border: '1px solid var(--border-glass)', color: '#fff', fontSize: '0.9rem' }}
@@ -362,7 +362,7 @@ export default function GuestView() {
               </div>
 
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
-                <span style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>Quantity</span>
+                <span style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>จำนวน</span>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
                   <button
                     onClick={() => setModalQuantity(q => Math.max(1, q - 1))}
@@ -385,7 +385,7 @@ export default function GuestView() {
                 className="btn-primary"
                 style={{ width: '100%', padding: '14px', fontSize: '1rem', fontWeight: 700 }}
               >
-                Add {modalQuantity} to Order • {(selectedProductModal.price * modalQuantity).toLocaleString()} THB
+                เพิ่ม {modalQuantity} รายการลงตะกร้า • {(selectedProductModal.price * modalQuantity).toLocaleString()} บาท
               </button>
             </div>
           </div>
@@ -399,7 +399,7 @@ export default function GuestView() {
             <div style={{ padding: '20px', borderBottom: '1px solid var(--border-glass)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <ShoppingBag style={{ color: 'var(--accent-cyan)', width: 22, height: 22 }} />
-                <h2 style={{ fontSize: '1.2rem', fontWeight: 700 }}>Your Order Cart</h2>
+                <h2 style={{ fontSize: '1.2rem', fontWeight: 700 }}>ตะกร้าสั่งอาหาร</h2>
               </div>
               <button onClick={() => setIsCartOpen(false)} style={{ background: 'none', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer' }}>
                 <X style={{ width: 22, height: 22 }} />
@@ -408,7 +408,7 @@ export default function GuestView() {
 
             <div style={{ flex: 1, overflowY: 'auto', padding: '20px' }}>
               <div style={{ background: 'rgba(6,182,212,0.08)', borderRadius: '10px', padding: '10px 14px', marginBottom: '16px', fontSize: '0.85rem', color: 'var(--accent-cyan)' }}>
-                📍 Ordering for: <strong>Table {selectedTable?.tableNumber}</strong>
+                📍 โต๊ะที่สั่ง: <strong>โต๊ะ {selectedTable?.tableNumber}</strong>
               </div>
 
               {cart.map((item, idx) => (
@@ -416,7 +416,7 @@ export default function GuestView() {
                   <div>
                     <div style={{ fontWeight: 600, fontSize: '0.95rem' }}>{item.product.name}</div>
                     <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
-                      {item.product.price} THB each
+                      {item.product.price} บาท/ชิ้น
                       {item.specialInstructions && ` • "${item.specialInstructions}"`}
                     </div>
                   </div>
@@ -441,18 +441,13 @@ export default function GuestView() {
 
             <div style={{ padding: '20px', borderTop: '1px solid var(--border-glass)', background: 'rgba(0,0,0,0.3)' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px', fontSize: '0.9rem', color: 'var(--text-secondary)' }}>
-                <span>Subtotal</span>
-                <span>{cartTotal.toLocaleString()} THB</span>
+                <span>ราคารวมสินค้า</span>
+                <span>{cartยอดรวม.toLocaleString()} บาท</span>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '16px', fontSize: '0.9rem', color: 'var(--text-secondary)' }}>
-                <span>VAT (7% Included)</span>
-                <span>{(cartTotal * 0.07).toFixed(2)} THB</span>
+                <span>ภาษีมูลค่าเพิ่ม VAT 7%</span>
+                <span>{(cartยอดรวม * 0.07).toFixed(2)} บาท</span>
               </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px', fontSize: '1.2rem', fontWeight: 800 }}>
-                <span>Total Due</span>
-                <span style={{ color: 'var(--accent-emerald)' }}>{cartTotal.toLocaleString()} THB</span>
-              </div>
-
               <button
                 onClick={handleCheckout}
                 disabled={isSubmitting}
@@ -468,3 +463,4 @@ export default function GuestView() {
     </div>
   );
 }
+

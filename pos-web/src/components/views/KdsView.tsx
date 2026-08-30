@@ -106,19 +106,19 @@ export default function KdsView() {
             <ChefHat style={{ color: '#fff', width: 26, height: 26 }} />
           </div>
           <div>
-            <h1 style={{ fontSize: '1.5rem', fontWeight: 800 }}>Kitchen Display System (KDS)</h1>
+            <h1 style={{ fontSize: '1.5rem', fontWeight: 800 }}>จอครัวดิจิทัล (Kitchen Display System)</h1>
             <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem' }}>
-              Live chef queue • Order state transitions (SUBMITTED ➔ COOKING ➔ READY)
+              คิวปรุงอาหารสำหรับเชฟ • ลำดับสถานะ (รอคิว ➔ กำลังปรุง ➔ ปรุงเสร็จ)
             </p>
           </div>
         </div>
 
-        {/* Status Filters */}
+        {/* สถานะ Filters */}
         <div style={{ display: 'flex', gap: '8px' }}>
           {[
-            { id: 'ALL', label: `All Active (${queue.length})` },
-            { id: 'SUBMITTED', label: `Pending Queue (${queue.filter(q => q.status === 'SUBMITTED').length})` },
-            { id: 'COOKING', label: `On Fire (${queue.filter(q => q.status === 'COOKING').length})` },
+            { id: 'ALL', label: `ทั้งหมด (${queue.length})` },
+            { id: 'SUBMITTED', label: `รอคิวครัว (${queue.filter(q => q.status === 'SUBMITTED').length})` },
+            { id: 'COOKING', label: `กำลังปรุง (${queue.filter(q => q.status === 'COOKING').length})` },
           ].map(f => (
             <button
               key={f.id}
@@ -145,9 +145,9 @@ export default function KdsView() {
         <div className="glass-panel" style={{ padding: '60px 20px', textAlign: 'center', color: 'var(--text-muted)' }}>
           <ChefHat style={{ width: 48, height: 48, margin: '0 auto 16px', opacity: 0.4 }} />
           <h3 style={{ fontSize: '1.2rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '6px' }}>
-            Kitchen Queue is Clear!
+            ไม่มีออเดอร์ค้างในครัว!
           </h3>
-          <p style={{ fontSize: '0.9rem' }}>All orders have been prepared and dispatched. Ready for new orders.</p>
+          <p style={{ fontSize: '0.9rem' }}>ปรุงอาหารและส่งมอบครบถ้วนแล้ว พร้อมรับออเดอร์ใหม่</p>
         </div>
       ) : (
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '20px' }}>
@@ -164,117 +164,72 @@ export default function KdsView() {
                 key={order.id}
                 className={`glass-panel ${isCooking ? 'ticket-cooking' : ''}`}
                 style={{
+                  padding: '20px',
                   display: 'flex',
                   flexDirection: 'column',
-                  border: isCooking ? '2px solid rgba(245, 158, 11, 0.8)' : '1px solid var(--border-glass)',
-                  overflow: 'hidden'
+                  borderTop: `4px solid ${isCooking ? 'var(--accent-amber)' : 'var(--accent-cyan)'}`
                 }}
               >
-                {/* Ticket Header */}
-                <div style={{
-                  padding: '16px 20px',
-                  background: isCooking ? 'rgba(245, 158, 11, 0.12)' : 'rgba(255, 255, 255, 0.03)',
-                  borderBottom: '1px solid var(--border-glass)',
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center'
-                }}>
+                {/* Ticket Top Meta */}
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '14px' }}>
                   <div>
-                    <span style={{ fontSize: '1.25rem', fontWeight: 800 }}>Table {order.tableNumber}</span>
-                    <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-                      #{order.orderNumber} • {order.createdByActor}
+                    <span style={{ fontSize: '1.25rem', fontWeight: 800, color: '#fff' }}>
+                      โต๊ะ {order.tableNumber || `T-${order.id}`}
+                    </span>
+                    <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
+                      #{order.orderNumber}
                     </div>
                   </div>
 
-                  {/* Elapsed Timer Badge */}
-                  <div style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '6px',
-                    padding: '6px 12px',
-                    borderRadius: '20px',
-                    background: timerBg,
-                    border: `1px solid ${timerColor}`,
-                    color: timerColor,
-                    fontWeight: 800,
-                    fontSize: '0.9rem',
-                    fontFamily: 'var(--font-mono)'
-                  }}>
-                    <Clock style={{ width: 14, height: 14 }} />
-                    {formatted}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', background: timerBg, border: `1px solid ${timerColor}40`, padding: '4px 10px', borderRadius: '12px' }}>
+                    <Clock style={{ width: 14, height: 14, color: timerColor }} />
+                    <span style={{ fontWeight: 800, fontSize: '0.85rem', color: timerColor, fontFamily: 'var(--font-mono)' }}>
+                      {formatted}
+                    </span>
                   </div>
                 </div>
 
                 {/* Items List */}
-                <div style={{ padding: '20px', flex: 1 }}>
+                <div style={{ flex: 1, borderTop: '1px dashed var(--border-glass)', borderBottom: '1px dashed var(--border-glass)', padding: '12px 0', marginBottom: '16px' }}>
                   {order.items.map((item, idx) => (
-                    <div key={idx} style={{ marginBottom: '14px', paddingBottom: '10px', borderBottom: idx < order.items.length - 1 ? '1px solid var(--border-glass)' : 'none' }}>
-                      <div style={{ display: 'flex', alignItems: 'baseline', gap: '10px' }}>
-                        <span style={{
-                          background: 'rgba(255,255,255,0.1)',
-                          color: '#fff',
-                          fontWeight: 800,
-                          fontSize: '0.95rem',
-                          padding: '2px 8px',
-                          borderRadius: '6px',
-                          minWidth: '28px',
-                          textAlign: 'center'
-                        }}>
+                    <div key={idx} style={{ marginBottom: '10px' }}>
+                      <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
+                        <span style={{ fontSize: '1.1rem', fontWeight: 800, color: 'var(--accent-cyan)' }}>
                           {item.quantity}x
                         </span>
-                        <span style={{ fontWeight: 700, fontSize: '1.05rem' }}>{item.productName}</span>
+                        <span style={{ fontSize: '0.95rem', fontWeight: 600, color: '#fff' }}>
+                          {item.productName}
+                        </span>
                       </div>
-
                       {item.specialInstructions && (
-                        <div style={{
-                          marginTop: '4px',
-                          marginLeft: '38px',
-                          fontSize: '0.8rem',
-                          color: 'var(--accent-amber)',
-                          background: 'rgba(245, 158, 11, 0.1)',
-                          padding: '4px 8px',
-                          borderRadius: '6px',
-                          display: 'inline-block'
-                        }}>
-                          ⚠️ Note: {item.specialInstructions}
+                        <div style={{ fontSize: '0.8rem', color: 'var(--accent-amber)', marginLeft: '26px', marginTop: '2px', background: 'rgba(245,158,11,0.1)', padding: '2px 8px', borderRadius: '6px', display: 'inline-block' }}>
+                          ⚠️ หมายเหตุ: {item.specialInstructions}
                         </div>
                       )}
                     </div>
                   ))}
-
-                  {order.notes && (
-                    <div style={{ marginTop: '8px', fontSize: '0.8rem', color: 'var(--text-muted)', fontStyle: 'italic' }}>
-                      Order Notes: {order.notes}
-                    </div>
-                  )}
                 </div>
 
-                {/* Ticket Actions */}
-                <div style={{ padding: '16px 20px', background: 'rgba(0,0,0,0.25)', borderTop: '1px solid var(--border-glass)' }}>
-                  {!isCooking ? (
-                    <button
-                      onClick={() => handleAccept(order.id)}
-                      className="btn-primary"
-                      style={{
-                        width: '100%',
-                        background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
-                        boxShadow: '0 4px 14px rgba(245, 158, 11, 0.35)',
-                        fontSize: '0.95rem',
-                        fontWeight: 700
-                      }}
-                    >
-                      <Flame style={{ width: 18, height: 18 }} /> Accept (Start Cooking)
-                    </button>
-                  ) : (
-                    <button
-                      onClick={() => handleComplete(order.id)}
-                      className="btn-success"
-                      style={{ width: '100%', fontSize: '0.95rem', fontWeight: 700 }}
-                    >
-                      <CheckCircle2 style={{ width: 18, height: 18 }} /> Complete & Call Waiter
-                    </button>
-                  )}
-                </div>
+                {/* Transition Action Button */}
+                {order.status === 'SUBMITTED' ? (
+                  <button
+                    onClick={() => handleAccept(order.id)}
+                    className="btn-primary"
+                    style={{ width: '100%', padding: '12px', background: 'linear-gradient(135deg, #f59e0b, #d97706)', boxShadow: '0 4px 14px rgba(245,158,11,0.35)' }}
+                  >
+                    <Flame style={{ width: 18, height: 18 }} />
+                    <span>🔥 รับออเดอร์ & เริ่มปรุง</span>
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => handleComplete(order.id)}
+                    className="btn-success"
+                    style={{ width: '100%', padding: '12px' }}
+                  >
+                    <CheckCircle2 style={{ width: 18, height: 18 }} />
+                    <span>✨ ปรุงเสร็จ • ส่งให้พนักงานเสิร์ฟ</span>
+                  </button>
+                )}
               </div>
             );
           })}
@@ -283,3 +238,4 @@ export default function KdsView() {
     </div>
   );
 }
+

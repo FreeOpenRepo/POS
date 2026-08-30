@@ -99,10 +99,10 @@ export default function Home() {
             gap: '4px'
           }}>
             {[
-              { role: 'Guest' as const, label: 'Guest Menu', icon: Sparkles, color: 'var(--accent-cyan)' },
-              { role: 'Waiter' as const, label: 'Waiter Floor', icon: Users, color: 'var(--accent-blue)' },
-              { role: 'KitchenChef' as const, label: 'Kitchen (KDS)', icon: ChefHat, color: 'var(--accent-amber)' },
-              { role: 'Cashier' as const, label: 'Cashier POS', icon: Banknote, color: 'var(--accent-emerald)' },
+              { role: 'Guest' as const, label: 'เมนูลูกค้า (Guest)', icon: Sparkles, color: 'var(--accent-cyan)' },
+              { role: 'Waiter' as const, label: 'ผังโต๊ะบริกร (Waiter)', icon: Users, color: 'var(--accent-blue)' },
+              { role: 'KitchenChef' as const, label: 'จอครัว (KDS Chef)', icon: ChefHat, color: 'var(--accent-amber)' },
+              { role: 'Cashier' as const, label: 'แคชเชียร์ชำระเงิน (Cashier)', icon: Banknote, color: 'var(--accent-emerald)' },
             ].map(tab => {
               const Icon = tab.icon;
               const isActive = activeRole === tab.role;
@@ -133,7 +133,7 @@ export default function Home() {
             })}
           </div>
 
-          {/* Live Status Indicators */}
+          {/* Live สถานะ Indicators */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
             {/* SignalR Connection State */}
             <div style={{
@@ -149,7 +149,7 @@ export default function Home() {
               color: isConnected ? '#34d399' : '#fca5a5'
             }}>
               {isConnected ? <Wifi style={{ width: 12, height: 12 }} /> : <WifiOff style={{ width: 12, height: 12 }} />}
-              <span>{isConnected ? 'SignalR WSS Live' : 'Connecting API...'}</span>
+              <span>{isConnected ? 'ระบบสด Real-time' : 'กำลังเชื่อมต่อ API...'}</span>
             </div>
 
             {/* Offline Sync Trigger */}
@@ -172,7 +172,7 @@ export default function Home() {
               }}
             >
               <RefreshCw style={{ width: 12, height: 12, animation: isSyncing ? 'spin 1s linear infinite' : 'none' }} />
-              <span>Dexie Offline Store</span>
+              <span>ซิงค์ออฟไลน์</span>
             </button>
           </div>
         </div>
@@ -188,3 +188,4 @@ export default function Home() {
     </main>
   );
 }
+

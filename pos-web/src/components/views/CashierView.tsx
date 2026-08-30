@@ -73,7 +73,7 @@ export default function CashierView() {
 
   function handleSelectOrderForSettlement(order: Order) {
     setSelectedOrder(order);
-    setAmountTendered(order.grandTotal);
+    setAmountTendered(order.grandยอดรวม);
     setPaymentMethod('CASH');
     setTxnRef('');
     setErrorMessage(null);
@@ -81,8 +81,8 @@ export default function CashierView() {
 
   async function handleSettlePayment() {
     if (!selectedOrder) return;
-    if (amountTendered < selectedOrder.grandTotal) {
-      setErrorMessage(`Amount tendered (${amountTendered} THB) is less than total due (${selectedOrder.grandTotal} THB).`);
+    if (amountTendered < selectedOrder.grandยอดรวม) {
+      setErrorMessage(`Amount tendered (${amountTendered} THB) is less than total due (${selectedOrder.grandยอดรวม} THB).`);
       return;
     }
 
@@ -146,7 +146,7 @@ export default function CashierView() {
     }
   }
 
-  const changeDue = selectedOrder ? Math.max(0, amountTendered - selectedOrder.grandTotal) : 0;
+  const changeDue = selectedOrder ? Math.max(0, amountTendered - selectedOrder.grandยอดรวม) : 0;
 
   return (
     <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '24px 16px', minHeight: '100vh' }}>
@@ -155,10 +155,10 @@ export default function CashierView() {
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             <Banknote style={{ color: 'var(--accent-emerald)', width: 26, height: 26 }} />
-            <h1 style={{ fontSize: '1.5rem', fontWeight: 800 }}>Cashier POS & Settle Bill</h1>
+            <h1 style={{ fontSize: '1.5rem', fontWeight: 800 }}>แคชเชียร์รับชำระเงิน & ออกใบเสร็จ (Cashier POS)</h1>
           </div>
           <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', marginTop: '4px' }}>
-            Bill settlement • Multi-payment tender • Automated BOM stock deduction • ESC/POS Thermal Printing
+            รับชำระเงินหลายช่องทาง • ตัดสต็อกวัตถุดิบอัตโนมัติตามสูตร BOM • สั่งพิมพ์สลิป ESC/POS Thermal
           </p>
         </div>
 
@@ -180,7 +180,7 @@ export default function CashierView() {
               gap: '6px'
             }}
           >
-            <Banknote style={{ width: 16, height: 16 }} /> POS Register ({orders.length})
+            <Banknote style={{ width: 16, height: 16 }} /> เครื่องคิดเงิน POS ({orders.length})
           </button>
 
           <button
@@ -199,7 +199,7 @@ export default function CashierView() {
               gap: '6px'
             }}
           >
-            <Package style={{ width: 16, height: 16 }} /> BOM Stock Inspector ({inventory.length})
+            <Package style={{ width: 16, height: 16 }} /> ตรวจสอบสต็อกวัตถุดิบ BOM ({inventory.length})
           </button>
         </div>
       </div>
@@ -208,16 +208,16 @@ export default function CashierView() {
         /* Register Layout: Order Grid */
         <div>
           <h2 style={{ fontSize: '1.2rem', fontWeight: 700, marginBottom: '16px' }}>
-            Active Bills Ready for Settlement
+            รายการบิลที่รอชำระเงิน
           </h2>
 
           {orders.length === 0 ? (
             <div className="glass-panel" style={{ padding: '60px 20px', textAlign: 'center', color: 'var(--text-muted)' }}>
               <CheckCircle2 style={{ width: 44, height: 44, margin: '0 auto 16px', opacity: 0.5, color: 'var(--accent-emerald)' }} />
               <h3 style={{ fontSize: '1.2rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '6px' }}>
-                All Accounts Settled
+                ชำระเงินครบถ้วนแล้วทุกบิล
               </h3>
-              <p style={{ fontSize: '0.9rem' }}>There are currently no outstanding bills to collect.</p>
+              <p style={{ fontSize: '0.9rem' }}>ไม่มีบิลค้างชำระในระบบขณะนี้</p>
             </div>
           ) : (
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))', gap: '20px' }}>
@@ -267,8 +267,8 @@ export default function CashierView() {
                           <span>{order.taxAmount.toFixed(2)} THB</span>
                         </div>
                         <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '1.05rem', fontWeight: 800, marginTop: '4px' }}>
-                          <span>Total Due:</span>
-                          <span style={{ color: 'var(--accent-emerald)' }}>{order.grandTotal.toLocaleString()} THB</span>
+                          <span>ยอดรวม Due:</span>
+                          <span style={{ color: 'var(--accent-emerald)' }}>{order.grandยอดรวม.toLocaleString()} THB</span>
                         </div>
                       </div>
                     </div>
@@ -310,7 +310,7 @@ export default function CashierView() {
                   <th style={{ padding: '12px 16px' }}>Current Stock</th>
                   <th style={{ padding: '12px 16px' }}>Min. Threshold</th>
                   <th style={{ padding: '12px 16px' }}>Unit Cost</th>
-                  <th style={{ padding: '12px 16px' }}>Status</th>
+                  <th style={{ padding: '12px 16px' }}>สถานะ</th>
                   <th style={{ padding: '12px 16px', textAlign: 'right' }}>Quick Restock</th>
                 </tr>
               </thead>
@@ -387,11 +387,11 @@ export default function CashierView() {
                 </div>
               )}
 
-              {/* Total Due Banner */}
+              {/* ยอดรวม Due Banner */}
               <div style={{ background: 'rgba(16, 185, 129, 0.12)', border: '1px solid rgba(16, 185, 129, 0.3)', borderRadius: '12px', padding: '16px', marginBottom: '20px', textAlign: 'center' }}>
                 <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Amount Due</div>
                 <div style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--accent-emerald)' }}>
-                  {selectedOrder.grandTotal.toLocaleString()} THB
+                  {selectedOrder.grandยอดรวม.toLocaleString()} THB
                 </div>
               </div>
 
@@ -413,7 +413,7 @@ export default function CashierView() {
                         onClick={() => {
                           setPaymentMethod(m.id as any);
                           if (m.id === 'PROMPTPAY_QR' || m.id === 'CREDIT_CARD') {
-                            setAmountTendered(selectedOrder.grandTotal);
+                            setAmountTendered(selectedOrder.grandยอดรวม);
                           }
                         }}
                         style={{
@@ -453,7 +453,7 @@ export default function CashierView() {
                   {/* Fast denomination buttons */}
                   <div style={{ display: 'flex', gap: '8px', marginBottom: '16px' }}>
                     {[
-                      { label: 'Exact', val: selectedOrder.grandTotal },
+                      { label: 'Exact', val: selectedOrder.grandยอดรวม },
                       { label: '500฿', val: 500 },
                       { label: '1,000฿', val: 1000 },
                       { label: '2,000฿', val: 2000 },
@@ -484,13 +484,13 @@ export default function CashierView() {
                 <div style={{ textAlign: 'center', padding: '10px' }}>
                   <div style={{ background: '#fff', padding: '16px', borderRadius: '12px', display: 'inline-block', marginBottom: '12px' }}>
                     <QRCodeSVG
-                      value={`00020101021229370016A000000677010111011300668999988885802TH5303764540${selectedOrder.grandTotal.toFixed(2)}6304`}
+                      value={`00020101021229370016A000000677010111011300668999988885802TH5303764540${selectedOrder.grandยอดรวม.toFixed(2)}6304`}
                       size={180}
                       level="H"
                     />
                   </div>
                   <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
-                    Scan with any Thai Banking App to pay <strong>{selectedOrder.grandTotal.toLocaleString()} THB</strong>
+                    Scan with any Thai Banking App to pay <strong>{selectedOrder.grandยอดรวม.toLocaleString()} THB</strong>
                   </p>
                 </div>
               )}
@@ -514,7 +514,7 @@ export default function CashierView() {
                 className="btn-success"
                 style={{ width: '100%', padding: '16px', marginTop: '20px', fontSize: '1.05rem', fontWeight: 800 }}
               >
-                {isProcessing ? 'Processing & Printing...' : `Complete Settlement (${selectedOrder.grandTotal.toLocaleString()} THB)`}
+                {isProcessing ? 'Processing & Printing...' : `Complete Settlement (${selectedOrder.grandยอดรวม.toLocaleString()} THB)`}
               </button>
             </div>
           </div>
@@ -572,3 +572,4 @@ export default function CashierView() {
     </div>
   );
 }
+

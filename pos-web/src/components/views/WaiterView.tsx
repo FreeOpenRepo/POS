@@ -102,10 +102,10 @@ export default function WaiterView() {
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <Users style={{ color: 'var(--accent-blue)', width: 24, height: 24 }} />
-            <h1 style={{ fontSize: '1.5rem', fontWeight: 800 }}>Waiter Service & Floor Plan</h1>
+            <h1 style={{ fontSize: '1.5rem', fontWeight: 800 }}>ระบบบริการ & ผังโต๊ะอาหาร (Floor Plan)</h1>
           </div>
           <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem', marginTop: '4px' }}>
-            Live table status, ready-to-serve notifications, and quick table order entry.
+            สถานะโต๊ะแบบสด, แจ้งเตือนอาหารพร้อมเสิร์ฟ และรับออเดอร์สำหรับพนักงานเสิร์ฟ
           </p>
         </div>
 
@@ -114,7 +114,7 @@ export default function WaiterView() {
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px', background: 'rgba(16, 185, 129, 0.15)', border: '1px solid rgba(16, 185, 129, 0.4)', borderRadius: '12px', padding: '8px 16px' }}>
             <Bell style={{ width: 20, height: 20, color: 'var(--accent-emerald)', animation: 'bounce 1s infinite' }} />
             <span style={{ fontWeight: 700, color: 'var(--accent-emerald)', fontSize: '0.9rem' }}>
-              {readyAlerts.length} Order{readyAlerts.length > 1 ? 's' : ''} Ready for Serving!
+              มีอาหารพร้อมเสิร์ฟ {readyAlerts.length} รายการ!
             </span>
           </div>
         )}
@@ -143,10 +143,10 @@ export default function WaiterView() {
                 </div>
                 <div>
                   <div style={{ fontWeight: 800, fontSize: '1.05rem', color: '#fff' }}>
-                    🍽️ Order {alert.orderNumber} is READY to Serve!
+                    🍽️ ออเดอร์ #{alert.orderNumber} ปรุงเสร็จพร้อมเสิร์ฟ!
                   </div>
                   <div style={{ fontSize: '0.85rem', color: 'rgba(255,255,255,0.8)' }}>
-                    Destination: <strong>Table {alert.tableNumber}</strong> • Pick up from kitchen counter
+                    ส่งไปที่: <strong>โต๊ะ {alert.tableNumber}</strong> • รับอาหารได้ที่เคาน์เตอร์ครัว
                   </div>
                 </div>
               </div>
@@ -156,7 +156,7 @@ export default function WaiterView() {
                 className="btn-success"
                 style={{ fontSize: '0.85rem', padding: '8px 16px' }}
               >
-                <CheckCircle2 style={{ width: 16, height: 16 }} /> Mark Served
+                <CheckCircle2 style={{ width: 16, height: 16 }} /> เสิร์ฟเรียบร้อย
               </button>
             </div>
           ))}
@@ -165,8 +165,8 @@ export default function WaiterView() {
 
       {/* Restaurant Floor Plan Grid */}
       <h2 style={{ fontSize: '1.2rem', fontWeight: 700, marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-        <span>Dining Floor Overview</span>
-        <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 500 }}>({tables.length} tables total)</span>
+        <span>ผังโต๊ะอาหารทั้งหมด</span>
+        <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 500 }}>(ทั้งหมด {tables.length} โต๊ะ)</span>
       </h2>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '18px', marginBottom: '40px' }}>
@@ -229,7 +229,7 @@ export default function WaiterView() {
                   </div>
                   <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.9rem', fontWeight: 700 }}>
                     <span style={{ color: 'var(--text-muted)' }}>Bill:</span>
-                    <span style={{ color: 'var(--accent-emerald)' }}>{tableOrder.grandTotal.toLocaleString()} THB</span>
+                    <span style={{ color: 'var(--accent-emerald)' }}>{tableOrder.grandยอดรวม.toLocaleString()} THB</span>
                   </div>
                 </div>
               ) : (
@@ -328,7 +328,7 @@ export default function WaiterView() {
 
             <div style={{ padding: '18px 24px', borderTop: '1px solid var(--border-glass)', display: 'flex', gap: '12px', justifyContent: 'flex-end' }}>
               <button onClick={() => setSelectedTableForOrder(null)} className="btn-secondary">
-                Cancel
+                ยกเลิก
               </button>
               <button
                 onClick={handleTakeOrderSubmit}
@@ -344,3 +344,4 @@ export default function WaiterView() {
     </div>
   );
 }
+
